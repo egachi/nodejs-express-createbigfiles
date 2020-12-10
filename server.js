@@ -1,5 +1,7 @@
-const express = require('express')
+var express = require('express')
+var buffer = require('buffer')
 var fs = require('fs');
+
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -13,10 +15,15 @@ app.get('/create', async (req, res) => {
 
     var MegaBytes = req.query.sizeinmb || 40; //Size in MB
     var HowManyFiles = req.query.limit || 10; //Number of files
+    var SizeBufferLimit = (Math.round(buffer.constants.MAX_LENGTH / Math.pow(1024, 2).toFixed(0) * 1))
 
-    try{   
-        await createFiles(HowManyFiles, MegaBytes); 
-        res.send({ "Message": `${HowManyFiles} Files were created `})
+    try{ 
+        if(MegaBytes > (SizeBufferLimit)){
+            res.send({ "Error": `ERR_BUFFER_TOO_LARGE, current Buffer Size Limit is ${SizeBufferLimit}` });
+        } else { 
+            await createFiles(HowManyFiles, MegaBytes); 
+            res.send({ "Message": `${HowManyFiles} Files were created `})
+        }
     } catch(error){
         res.send({ "Error": error })
     } 
