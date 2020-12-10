@@ -1,6 +1,6 @@
 ## Summary
 
-This express sample creates .txt files with the desired size and with randome names in the current directory.
+This express sample creates .txt files with the desired size and with random names in the current directory.
 This sample is designed just for testing, please do not use this code in production.
 
 >This sample is using async functions so at least you will need node > v8.x.
